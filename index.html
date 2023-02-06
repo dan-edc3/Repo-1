@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)http://intranet.edc3.com/index.php/apps/YardAudit/display -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<style type="text/css">
+.center {
+  margin: auto;
+}
+
+		.audit_body {
+			font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+			background: silver;
+			position: fixed;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+		}
+
+		.dlx {
+			width: 120px;
+			height: 30px;
+			font-size: 24px;
+		}
+
+		.login {
+
+			font-size: 24px;
+			margin: 0 auto;
+			width: 50vw;
+		}
+
+		.login label {
+			width: 20vw;
+			display: inline-block;
+			text-align: right;
+			padding-right: 10px;
+		}
+
+		.login input[type=submit]{
+			width: 140px;
+			height: 40px;
+			font-size: 24px;
+		}
+
+		.login h4 {
+			font-size: 36px;
+			font-weight: bold;
+			text-align: center;
+		}
+
+		.display {
+			width: 98vw;
+			height: 90vw;
+			margin: 0 auto;
+			padding: 5px;
+		}
+
+		.display .header {
+			width: 100%;
+			font-weight: bold;
+			font-size: 36px;
+			text-align: center;
+			vertical-align: middle;
+			border-bottom: 2px solid black;
+			padding-bottom: 15px;
+			padding-top: 15px;
+		}
+
+		.display .loc {
+			font-size: 36px;
+			font-weight: bold;
+			width: 180px;
+			height: 40px;
+		}
+
+		#changeloc {
+			margin-bottom: 0px;
+		}
+
+		#logout {
+			float: left;
+		}
+
+		#logout input[type=button]{
+			width: 100px;
+			height: 40px;
+			font-weight: bold;
+			font-size: 22px;
+		}
+
+		#skip {
+			float: right;
+		}
+
+		#skip input[type=button], .submit{
+			width: 100px;
+			height: 40px;
+			font-weight: bold;
+			font-size: 22px;
+		}
+
+		.is_empty{
+			margin-left: 15px;
+			width: 220px;
+			height: 40px;
+			font-weight: bold;
+			font-size: 22px;
+		}
+
+		#change_loc {
+			width: 100px;
+			height: 40px;
+			font-weight: bold;
+			font-size: 22px;
+		}
+
+		.trailer {
+			width: 100%;
+		}
+
+		.table {
+			margin: 0 auto;
+			display: table;
+			font-size: 24px;
+		}
+
+		.tr {
+			display: table-row;
+			height: 60px;
+			padding-top: 5px;
+		}
+
+		.th {
+			display: table-cell;
+			vertical-align: middle;
+			text-align: center;
+			font-weight: bold;
+		}
+
+		.td {
+			display: table-cell;
+			padding: 10px;
+			text-align: center;
+		}
+
+		.td input, .td select {
+			font-size: 24px;
+		}
+
+		.tcap {
+			caption-side: bottom; 
+			display: table-caption; 
+			text-align: center;
+		}
+
+		.temp {
+			width: 60px;
+		}
+
+		#scac {
+			width: 100px;
+		}
+
+		.mismatch {
+			border: 2px solid red;
+		}
+
+	    /* toggle in label designing */
+	    .toggle {
+	        position : relative ;
+	        display : inline-block;
+	        width : 240px;
+	        height : 38px;
+	        background-color: salmon;
+	        border-radius: 30px;
+	        border: 2px solid gray;
+			text-align: center;
+			font-size: 28px;
+	    }
+           
+	    /* After slide changes */
+	    .toggle:after {
+	        content: '';
+	        position: absolute;
+	        width: 35px;
+	        height: 35px;
+	        border-radius: 50%;
+	        background-color: gray;
+	        top: 0px;
+	        left: 0px;
+	        transition:  all 0.5s;
+	    }
+	           
+	    /* Toggle text */
+	    p {
+	        font-family: Arial, Helvetica, sans-serif;
+	        font-weight: bold;
+	    }
+	           
+	    /* Checkbox checked effect */
+	    .checkbox:checked + .toggle::after {
+	        left : 204px;
+	    }
+	           
+	    /* Checkbox checked toggle label bg color */
+	    .checkbox:checked + .toggle {
+	        background-color: #98ff98;
+	    }
+	           
+	    /* Checkbox vanished */
+	    .checkbox {
+	        display : none;
+	    }
+	</style>
+
+	<style>
+		.switch {
+		  position: relative;
+		  display: inline-block;
+		  width: 60px;
+		  height: 34px;
+		}
+
+		.switch input { 
+		  opacity: 0;
+		  width: 0;
+		  height: 0;
+		}
+
+		.slider {
+		  position: absolute;
+		  cursor: pointer;
+		  top: 0;
+		  left: 0;
+		  right: 0;
+		  bottom: 0;
+		  background-color: #ccc;
+		  -webkit-transition: .4s;
+		  transition: .4s;
+		}
+
+		.slider:before {
+		  position: absolute;
+		  content: "";
+		  height: 26px;
+		  width: 26px;
+		  left: 4px;
+		  bottom: 4px;
+		  background-color: white;
+		  -webkit-transition: .4s;
+		  transition: .4s;
+		}
+
+		input:checked + .slider {
+		  background-color: #2196F3;
+		}
+
+		input:focus + .slider {
+		  box-shadow: 0 0 1px #2196F3;
+		}
+
+		input:checked + .slider:before {
+		  -webkit-transform: translateX(26px);
+		  -ms-transform: translateX(26px);
+		  transform: translateX(26px);
+		}
+
+		/* Rounded sliders */
+		.slider.round {
+		  border-radius: 34px;
+		}
+
+		.slider.round:before {
+		  border-radius: 50%;
+		}
+	</style>
+	<title>Yard Audit App</title>
+	<script src="./Yard Audit App 2_files/jquery-2.2.4.min.js.download" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="./Yard Audit App 2_files/jquery-confirm.min.css">
+	<script src="./Yard Audit App 2_files/jquery-confirm.min.js.download"></script>
+    <script type="text/javascript" src="./Yard Audit App 2_files/battery_level.js.download"></script>
+
+</head>
+<body>	
+<script type="text/javascript">
+	/*setTimeout(
+		function(){
+			$.ajax({
+	        type: "GET",
+	        url: 'http://intranet.edc3.com/index.php/apps/YardAudit/poll_db',
+	        dataType: "json",
+	        cache: 'false',
+	        success: function (data) {
+
+	        },
+	        error: function () {
+	            alert("No connection... Trying again in 5 seconds.");
+	            //callback getMyJson here in 5 seconds
+	        }
+	    })}
+			, 500);*/
+</script>
+<div class="audit_body"><div class="display">
+	<div class="header">
+		<span id="logout"><input type="button" name="logout" value="Log Out" onclick="window.location.href=&#39;logout&#39;"></span>
+		<!--<form id='changeloc' method='post' action='change'>		</form>-->
+		<span id="move" style="float: middle;">Auditing Yard: <input type="text" name="audit_loc" id="audit_loc" value="002" class="loc" onkeyup="if($(&#39;#audit_loc&#39;).val().length &gt; 0){$(&#39;#change_loc&#39;).show()}else{$(&#39;#change_loc&#39;).hide()}"></span>
+		<span id="skip"><input type="button" class="loc" id="change_loc" name="change_loc" value="Move" style="display:none" onclick="$(&#39;#tostol&#39;).val($(&#39;#audit_loc&#39;).val());if(!navigator.onLine){alert(&#39;No connection... Attempting to reconnect.&#39;);return false;}else{$(&#39;#moveloc&#39;).submit()}"><input type="button" name="skip" value="Skip" onclick="if(confirm(&#39;Proceed to next location?&#39;)){if(!navigator.onLine){alert(&#39;No connection... Attempting to reconnect.&#39;);return false;}else{$(&#39;#skiploc&#39;).submit()}}"></span>
+	</div>
+	<form id="skiploc" method="post" action="http://intranet.edc3.com/index.php/apps/YardAudit/next">
+		<input type="hidden" name="direction" value="1">
+		<input type="hidden" name="updown" id="updown" value="1">
+	</form>
+	<form id="moveloc" method="post" action="http://intranet.edc3.com/index.php/apps/YardAudit/move">
+		<input type="hidden" name="tostol" id="tostol" value="">
+	</form>
+	<form id="audit" name="audit" method="post" action="http://intranet.edc3.com/index.php/apps/YardAudit/save">
+		<input type="hidden" name="old_trlr[trlr_id]" value="">
+		<input type="hidden" id="old_scac" name="old_trlr[carcod]" value="">
+		<input type="hidden" id="old_trlr_num" name="old_trlr[trlr_num]" value="">
+		<input type="hidden" name="old_trlr[trlr_typ]" value="">
+		<input type="hidden" name="old_trlr[trlr_stat]" value="">
+		<input type="hidden" id="old_trlr_temp" name="old_trlr[trlr_temp]" value="">
+		<input type="hidden" id="old_fuel_level" name="old_trlr[fuel_level]" value="">
+		<div class="trailer">
+			<div class="table">
+				<div class="tr">
+					<div class="th"></div>
+					<div class="th">
+						<input type="checkbox" id="switch" name="switch" class="checkbox" checked="checked">
+						<label for="switch" class="toggle" id="direction" onclick="change_direction()">Increasing</label>
+	    			</div>
+					<div class="th"></div>
+					<div class="th"></div>
+				</div>
+				<div class="tr">
+					<div class="th">SCAC</div>
+					<div class="th">Trailer #</div>
+					<div class="th">Type</div>
+					<div class="th"></div>
+				</div>
+				<div class="tr">
+					<div class="td">
+						<div class="autocomplete">
+				    		<input id="scac" type="text" name="trlr[carcod]" placeholder="SCAC" value="" onkeyup="test_change(&#39;scac&#39;)" "="">
+				  		</div>
+				  						  	</div>
+					<div class="td"><input type="text" id="trlr_num" name="trlr[trlr_num]" value="" onkeyup="test_change(&#39;trlr_num&#39;)"></div>
+					<div class="td"></div>
+					<div class="td"></div>
+				</div>
+				<div class="tr">
+					<div class="th">Trl. Status</div>
+					<div class="th">Temp.</div>
+					<div class="th">Fuel Level</div>
+					<div class="th"></div>
+				</div>
+				<div class="tr">
+					<div class="td"></div>
+					<div class="td"><input type="text" name="trlr[trlr_temp]" class="temp" onkeydown="return numbers_only(event)" value="" id="temp" onkeyup="test_change(&#39;temp&#39;)"></div>
+											<div class="td"><select name="trlr[fuel_level]" id="fuel_level" onchange="test_change(&#39;fuel_level&#39;)">
+<option value="" selected="selected"></option>
+<option value="1">FULL</option>
+<option value="0.75">3/4</option>
+<option value="0.5">1/2</option>
+<option value="0.25">1/4</option>
+<option value="0.125">1/8</option>
+<option value="0">EMPTY</option>
+</select>
+</div>
+										<div class="td"></div>
+				</div>
+				<div class="tr">
+					<div class="th"></div>
+					<div class="th">Comments</div>
+					<div class="th"></div>
+					<div class="th"></div>
+					
+				</div>
+				<div class="tr">
+					<div class="td"></div>
+					<div class="td"><textarea name="trlr[audit_comments]" rows="4" cols="40"></textarea></div>
+					<div class="td"></div>
+					<div class="td"></div>
+					
+				</div>
+				<div class="tr">
+					<div class="th"></div>
+					<div class="th"><input type="submit" name="submit" value="Submit" class="submit" onclick="return do_submit()"><input type="submit" name="empty" value="Location Is Empty" class="is_empty" onclick="return do_empty_submit()"></div>
+					<div class="th"></div>
+					<div class="th"></div>
+					
+				</div>
+				
+			</div>
+		</div>
+	</form>
+	<footer>
+		<div class="center">
+	 <p style="text-align: center;"><embed src="https://tkt01/batt1" style="width:device-width; height: 240px;"></p><p>
+	</p></div>
+	</footer>
+</div>
+
+<script type="text/javascript">
+
+
+	function do_submit(){
+		$('#fuel_level').attr('required',true);
+		if(!confirm('Submit this audit and continue?')){
+			return false;
+		}
+		if(!navigator.onLine){
+            alert("No connection... Attempting to reconnect.");
+            return false;
+		}
+		//return test_submit();
+	}
+
+	function do_empty_submit(){
+		if(!confirm('Submit this audit and continue?')){
+			return false;
+		}
+		if(!navigator.onLine){
+            alert("No connection... Attempting to reconnect.");
+            return false;
+		}
+		$('#temp').attr('required',false);
+		$('#fuel_level').attr('required',false);
+		//return test_submit();
+		/*$.ajax({
+            type: "POST",
+            url: 'http://intranet.edc3.com/index.php/apps/YardAudit/poll_db',
+            dataType: "json",
+            cache: 'false',
+            success: function (data) {
+            	return true;
+            },
+            error: function () {
+                alert("No connection... Attempting to reconnect.");
+                return false;
+                //callback getMyJson here in 5 seconds
+                //setTimeout(function () {
+                    test_submit();
+                }, 5000)
+            }
+        });*/
+	}
+
+	// Loop until a DB call is complete before posting the audit info
+	function test_submit(){
+        $.ajax({
+            type: "POST",
+            url: 'http://intranet.edc3.com/index.php/apps/YardAudit/poll_db',
+            dataType: "json",
+            cache: 'false',
+            success: function (data) {
+            	return true;
+            },
+            error: function () {
+                alert("No connection... Attempting to reconnect.");
+                return false;
+                //callback getMyJson here in 5 seconds
+                /*setTimeout(function () {
+                    test_submit();
+                }, 5000)*/
+            }
+        });
+	}
+
+	function test_change(cat){
+		if(cat == 'fuel_level'){
+			if(document.getElementById('fuel_level').value == document.getElementById('old_fuel_level').value){
+				$('#fuel_level').removeClass('mismatch');
+			}
+			else{
+				$('#fuel_level').addClass('mismatch');
+			}
+		}
+		else if(cat == 'temp'){
+			if(document.getElementById('temp').value == document.getElementById('old_trlr_temp').value){
+				$('#temp').removeClass('mismatch');
+			}
+			else{
+				$('#temp').addClass('mismatch');
+			}
+		}
+		else if(cat == 'trlr_num'){
+			if(document.getElementById('trlr_num').value == document.getElementById('old_trlr_num').value){
+				$('#trlr_num').removeClass('mismatch');
+			}
+			else{
+				$('#trlr_num').addClass('mismatch');
+			}
+		}
+		else if(cat == 'scac'){
+			if(document.getElementById('scac').value == document.getElementById('old_scac').value){
+				$('#scac').removeClass('mismatch');
+			}
+			else{
+				$('#scac').addClass('mismatch');
+			}
+		}
+	}
+
+	function numbers_only(event){
+        var kc, num, rt = false;
+        kc = event.keyCode;
+        if(kc == 8 || ((kc > 47 && kc < 58) || (kc > 95 && kc < 106))) rt = true;
+        return rt;
+	}
+
+
+	function change_direction(){
+		var dir = $('#direction').html();
+		var newdir = (dir == 'Increasing')?'Decreasing':'Increasing';
+		$('#direction').html(newdir);
+		$('#updown').val((dir == 'Increasing')?0:1);
+	}
+</script>
+
+<script type="text/javascript" src="./Yard Audit App 2_files/autocomplete.js.download"></script>
+<link rel="stylesheet" href="./Yard Audit App 2_files/autocomplete.css" type="text/css"> 
+
+<script type="text/javascript">
+	var scac = ["","ABIN","INST","TBXK","ARVY","TDEI","KLLU","TIPQ","BLZF","KLMI","TQYL","BTAK","KTPS","TQLM","TTMB","CEFV","LDLC","CENT","LLLE","VCPB","CLIJ","LMBT","CLXD","LNNP","WENP","CPU1","CRFS","MADD","XPDR","CRPY","MENA","MEPP","YODO","ECMT","MRRK","ENGA","MTEL","ENG2","MTEN","ENGC","ENGI","NALC","ERBL","NLSB","ESCR","NPAT","NPDS","FAKE","FEFS","PECO","PENN","GRTV","PGPS","PRIJ","HCSS","PRIU","HEPC","PRML","HJBR","PRQT","HJIR","HMFR","SFWY","HWLS","SHAF","HWRC","STTZ","STVV"];
+	autocomplete(document.getElementById("scac"), scac); 
+</script></div>
+ <div id="codeigniter_profiler" style="clear:both;background-color:#fff;padding:10px;">
+
+<fieldset id="ci_profiler_benchmarks" style="border:1px solid #900;padding:6px 10px 10px 10px;margin:20px 0 20px 0;background-color:#eee;">
+<legend style="color:#900;">&nbsp;&nbsp;BENCHMARKS&nbsp;&nbsp;</legend>
+
+
+<table style="width:100%;">
+<tbody><tr><td style="padding:5px;width:50%;color:#000;font-weight:bold;background-color:#ddd;">Loading Time: Base Classes&nbsp;&nbsp;</td><td style="padding:5px;width:50%;color:#900;font-weight:normal;background-color:#ddd;">0.0003</td></tr>
+<tr><td style="padding:5px;width:50%;color:#000;font-weight:bold;background-color:#ddd;">Controller Execution Time ( YardAudit / Display )&nbsp;&nbsp;</td><td style="padding:5px;width:50%;color:#900;font-weight:normal;background-color:#ddd;">0.4665</td></tr>
+<tr><td style="padding:5px;width:50%;color:#000;font-weight:bold;background-color:#ddd;">Total Execution Time&nbsp;&nbsp;</td><td style="padding:5px;width:50%;color:#900;font-weight:normal;background-color:#ddd;">0.4669</td></tr>
+</tbody></table>
+</fieldset>
+
+<fieldset id="ci_profiler_get" style="border:1px solid #cd6e00;padding:6px 10px 10px 10px;margin:20px 0 20px 0;background-color:#eee;">
+<legend style="color:#cd6e00;">&nbsp;&nbsp;GET DATA&nbsp;&nbsp;</legend>
+<div style="color:#cd6e00;font-weight:normal;padding:4px 0 4px 0;">No GET data exists</div></fieldset>
+
+<fieldset id="ci_profiler_memory_usage" style="border:1px solid #5a0099;padding:6px 10px 10px 10px;margin:20px 0 20px 0;background-color:#eee;">
+<legend style="color:#5a0099;">&nbsp;&nbsp;MEMORY USAGE&nbsp;&nbsp;</legend>
+<div style="color:#5a0099;font-weight:normal;padding:4px 0 4px 0;">501,904 bytes</div></fieldset>
+
+<fieldset id="ci_profiler_post" style="border:1px solid #009900;padding:6px 10px 10px 10px;margin:20px 0 20px 0;background-color:#eee;">
+<legend style="color:#009900;">&nbsp;&nbsp;POST DATA&nbsp;&nbsp;</legend>
+<div style="color:#009900;font-weight:normal;padding:4px 0 4px 0;">No POST data exists</div></fieldset>
+
+<fieldset id="ci_profiler_uri_string" style="border:1px solid #000;padding:6px 10px 10px 10px;margin:20px 0 20px 0;background-color:#eee;">
+<legend style="color:#000;">&nbsp;&nbsp;URI STRING&nbsp;&nbsp;</legend>
+<div style="color:#000;font-weight:normal;padding:4px 0 4px 0;">apps/YardAudit/display</div></fieldset>
+
+<fieldset id="ci_profiler_controller_info" style="border:1px solid #995300;padding:6px 10px 10px 10px;margin:20px 0 20px 0;background-color:#eee;">
+<legend style="color:#995300;">&nbsp;&nbsp;CLASS/METHOD&nbsp;&nbsp;</legend>
+<div style="color:#995300;font-weight:normal;padding:4px 0 4px 0;">YardAudit/display</div></fieldset>
+
+<fieldset style="border:1px solid #0000FF;padding:6px 10px 10px 10px;margin:20px 0 20px 0;background-color:#eee;">
+<legend style="color:#0000FF;">&nbsp;&nbsp;DATABASE:&nbsp; edc3intranet (YardAudit:$db)&nbsp;&nbsp;&nbsp;QUERIES: 2 (0.0947 seconds)&nbsp;&nbsp;(<span style="cursor: pointer;" onclick="var s=document.getElementById(&#39;ci_profiler_queries_db_0&#39;).style;s.display=s.display==&#39;none&#39;?&#39;&#39;:&#39;none&#39;;this.innerHTML=this.innerHTML==&#39;Hide&#39;?&#39;Show&#39;:&#39;Hide&#39;;">Hide</span>)</legend>
+
+
+<table style="" id="ci_profiler_queries_db_0">
+<tbody><tr><td style="padding:5px;vertical-align:top;width:1%;color:#900;font-weight:normal;background-color:#ddd;">0.0028&nbsp;&nbsp;</td><td style="padding:5px;color:#000;font-weight:normal;background-color:#ddd;"><code><span style="color: #000000">
+<span style="color: #0000BB">select&nbsp;distinct&nbsp;p</span><span style="color: #007700">.</span><span style="color: #0000BB">page_id</span><span style="color: #007700">,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">p</span><span style="color: #007700">.</span><span style="color: #0000BB">page_name</span><span style="color: #007700">,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">p</span><span style="color: #007700">.</span><span style="color: #0000BB">page_order</span><span style="color: #007700">,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">p</span><span style="color: #007700">.</span><span style="color: #0000BB">directory</span><span style="color: #007700">,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">p</span><span style="color: #007700">.class,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">p</span><span style="color: #007700">.</span><span style="color: #0000BB">method</span><span style="color: #007700">,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">g</span><span style="color: #007700">.</span><span style="color: #0000BB">group_name</span><span style="color: #007700">,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">pg</span><span style="color: #007700">.</span><span style="color: #0000BB">group_name&nbsp;parent_group_name</span><span style="color: #007700">,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case&nbsp;</span><span style="color: #0000BB">when&nbsp;pg</span><span style="color: #007700">.</span><span style="color: #0000BB">group_name&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'Homepage'&nbsp;</span><span style="color: #0000BB">then&nbsp;g</span><span style="color: #007700">.</span><span style="color: #0000BB">group_order&nbsp;</span><span style="color: #007700">else&nbsp;</span><span style="color: #0000BB">pg</span><span style="color: #007700">.</span><span style="color: #0000BB">group_order&nbsp;end&nbsp;group_order<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>FROM</strong>&nbsp;edc3intranet</span><span style="color: #007700">.</span><span style="color: #0000BB">dbo</span><span style="color: #007700">.</span><span style="color: #0000BB">acl_page&nbsp;p<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;left<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;join&nbsp;edc3intranet</span><span style="color: #007700">.</span><span style="color: #0000BB">dbo</span><span style="color: #007700">.</span><span style="color: #0000BB">acl_group&nbsp;g<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on&nbsp;p</span><span style="color: #007700">.</span><span style="color: #0000BB">group_id&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">g</span><span style="color: #007700">.</span><span style="color: #0000BB">group_id<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;left<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;join&nbsp;edc3intranet</span><span style="color: #007700">.</span><span style="color: #0000BB">dbo</span><span style="color: #007700">.</span><span style="color: #0000BB">acl_group&nbsp;pg<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on&nbsp;g</span><span style="color: #007700">.</span><span style="color: #0000BB">parent_group&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">pg</span><span style="color: #007700">.</span><span style="color: #0000BB">group_id<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;left<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;join&nbsp;edc3intranet</span><span style="color: #007700">.</span><span style="color: #0000BB">dbo</span><span style="color: #007700">.</span><span style="color: #0000BB">acl_page_role&nbsp;pr<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on&nbsp;p</span><span style="color: #007700">.</span><span style="color: #0000BB">page_id&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">pr</span><span style="color: #007700">.</span><span style="color: #0000BB">page_id<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;left<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;join&nbsp;edc3intranet</span><span style="color: #007700">.</span><span style="color: #0000BB">dbo</span><span style="color: #007700">.</span><span style="color: #0000BB">acl_tm_role&nbsp;tr<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on&nbsp;pr</span><span style="color: #007700">.</span><span style="color: #0000BB">role_id&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">tr</span><span style="color: #007700">.</span><span style="color: #0000BB">role_id<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;tr</span><span style="color: #007700">.</span><span style="color: #0000BB">tm_id&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">2<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">and&nbsp;</span><span style="color: #0000BB">g</span><span style="color: #007700">.</span><span style="color: #0000BB">parent_group&nbsp;</span><span style="color: #007700">&gt;&nbsp;</span><span style="color: #0000BB">0<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">and&nbsp;</span><span style="color: #0000BB">p</span><span style="color: #007700">.</span><span style="color: #0000BB">show_link&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">1<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;order&nbsp;by&nbsp;</span><span style="color: #FF8000">/*&nbsp;*/</span><span style="color: #007700">case&nbsp;</span><span style="color: #0000BB">when&nbsp;pg</span><span style="color: #007700">.</span><span style="color: #0000BB">group_name&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'Homepage'&nbsp;</span><span style="color: #0000BB">then&nbsp;g</span><span style="color: #007700">.</span><span style="color: #0000BB">group_order&nbsp;</span><span style="color: #007700">else&nbsp;</span><span style="color: #0000BB">pg</span><span style="color: #007700">.</span><span style="color: #0000BB">group_order&nbsp;end</span><span style="color: #007700">,</span><span style="color: #0000BB">p</span><span style="color: #007700">.</span><span style="color: #0000BB">page_order</span><span style="color: #007700">,&nbsp;</span><span style="color: #0000BB">p</span><span style="color: #007700">.</span><span style="color: #0000BB">page_name&nbsp;</span>
+</span>
+</code></td></tr>
+<tr><td style="padding:5px;vertical-align:top;width:1%;color:#900;font-weight:normal;background-color:#ddd;">0.0919&nbsp;&nbsp;</td><td style="padding:5px;color:#000;font-weight:normal;background-color:#ddd;"><code><span style="color: #000000">
+<span style="color: #0000BB">update&nbsp;edc3intranet</span><span style="color: #007700">.</span><span style="color: #0000BB">dbo</span><span style="color: #007700">.</span><span style="color: #0000BB">teammate&nbsp;set&nbsp;last_page&nbsp;</span><span style="color: #007700">=&nbsp;<strong>(</strong></span><span style="color: #0000BB">select&nbsp;min</span><span style="color: #007700"><strong>(</strong></span><span style="color: #0000BB">p</span><span style="color: #007700">.</span><span style="color: #0000BB">page_id</span><span style="color: #007700"><strong>)</strong>&nbsp;</span><span style="color: #0000BB">from&nbsp;edc3intranet</span><span style="color: #007700">.</span><span style="color: #0000BB">dbo</span><span style="color: #007700">.</span><span style="color: #0000BB">acl_page&nbsp;p<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;left&nbsp;join&nbsp;edc3intranet</span><span style="color: #007700">.</span><span style="color: #0000BB">dbo</span><span style="color: #007700">.</span><span style="color: #0000BB">acl_page_role&nbsp;pr&nbsp;on&nbsp;p</span><span style="color: #007700">.</span><span style="color: #0000BB">page_id&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">pr</span><span style="color: #007700">.</span><span style="color: #0000BB">page_id<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;left&nbsp;join&nbsp;edc3intranet</span><span style="color: #007700">.</span><span style="color: #0000BB">dbo</span><span style="color: #007700">.</span><span style="color: #0000BB">acl_tm_role&nbsp;tr&nbsp;on&nbsp;pr</span><span style="color: #007700">.</span><span style="color: #0000BB">role_id&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">tr</span><span style="color: #007700">.</span><span style="color: #0000BB">role_id<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700"><strong>(</strong><strong>(</strong></span><span style="color: #0000BB">p</span><span style="color: #007700">.</span><span style="color: #0000BB">directory&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'apps'&nbsp;</span><span style="color: #007700">and&nbsp;</span><span style="color: #0000BB">p</span><span style="color: #007700">.class&nbsp;=&nbsp;</span><span style="color: #DD0000">'YardAudit'&nbsp;</span><span style="color: #007700">and&nbsp;</span><span style="color: #0000BB">p</span><span style="color: #007700">.</span><span style="color: #0000BB">method</span><span style="color: #007700">=</span><span style="color: #DD0000">'display'</span><span style="color: #007700"><strong>)</strong>&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or&nbsp;<strong>(</strong></span><span style="color: #0000BB">p</span><span style="color: #007700">.</span><span style="color: #0000BB">directory&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'apps'&nbsp;</span><span style="color: #007700">and&nbsp;</span><span style="color: #0000BB">p</span><span style="color: #007700">.class&nbsp;=&nbsp;</span><span style="color: #DD0000">'YardAudit'&nbsp;</span><span style="color: #007700">and&nbsp;</span><span style="color: #0000BB">p</span><span style="color: #007700">.</span><span style="color: #0000BB">app_main&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">1</span><span style="color: #007700"><strong>)</strong>&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or&nbsp;<strong>(</strong></span><span style="color: #0000BB">p</span><span style="color: #007700">.</span><span style="color: #0000BB">directory&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'apps'&nbsp;</span><span style="color: #007700">and&nbsp;</span><span style="color: #0000BB">p</span><span style="color: #007700">.</span><span style="color: #0000BB">folder_main&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">1</span><span style="color: #007700"><strong>)</strong><strong>)</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;<strong>(</strong></span><span style="color: #0000BB">tr</span><span style="color: #007700">.</span><span style="color: #0000BB">tm_id&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">2&nbsp;</span><span style="color: #007700">or&nbsp;</span><span style="color: #0000BB">p</span><span style="color: #007700">.</span><span style="color: #0000BB">logged_in&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">0&nbsp;</span><span style="color: #007700">or&nbsp;</span><span style="color: #0000BB">p</span><span style="color: #007700">.</span><span style="color: #0000BB">access_control&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">0</span><span style="color: #007700"><strong>)</strong><strong>)</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">where&nbsp;tm_id&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">2&nbsp;</span>
+</span>
+</code></td></tr>
+</tbody></table>
+</fieldset><fieldset style="border:1px solid #0000FF;padding:6px 10px 10px 10px;margin:20px 0 20px 0;background-color:#eee;">
+<legend style="color:#0000FF;">&nbsp;&nbsp;DATABASE:&nbsp;  (YardAudit:$dlx)&nbsp;&nbsp;&nbsp;QUERIES: 1 (0.0642 seconds)&nbsp;&nbsp;(<span style="cursor: pointer;" onclick="var s=document.getElementById(&#39;ci_profiler_queries_db_1&#39;).style;s.display=s.display==&#39;none&#39;?&#39;&#39;:&#39;none&#39;;this.innerHTML=this.innerHTML==&#39;Hide&#39;?&#39;Show&#39;:&#39;Hide&#39;;">Hide</span>)</legend>
+
+
+<table style="" id="ci_profiler_queries_db_1">
+<tbody><tr><td style="padding:5px;vertical-align:top;width:1%;color:#900;font-weight:normal;background-color:#ddd;">0.0642&nbsp;&nbsp;</td><td style="padding:5px;color:#000;font-weight:normal;background-color:#ddd;"><code><span style="color: #000000">
+<span style="color: #0000BB">select&nbsp;l</span><span style="color: #007700">.</span><span style="color: #0000BB">stoloc</span><span style="color: #007700">,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">l</span><span style="color: #007700">.</span><span style="color: #0000BB">locsts</span><span style="color: #007700">,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">st</span><span style="color: #007700">.</span><span style="color: #0000BB">lngdsc&nbsp;trlr_stat</span><span style="color: #007700">,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">t</span><span style="color: #007700">.</span><span style="color: #0000BB">trlr_id</span><span style="color: #007700">,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">t</span><span style="color: #007700">.</span><span style="color: #0000BB">trlr_num</span><span style="color: #007700">,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">t</span><span style="color: #007700">.</span><span style="color: #0000BB">carcod</span><span style="color: #007700">,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">t</span><span style="color: #007700">.</span><span style="color: #0000BB">trlr_typ</span><span style="color: #007700">,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">t</span><span style="color: #007700">.</span><span style="color: #0000BB">trlr_size</span><span style="color: #007700">,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">t</span><span style="color: #007700">.</span><span style="color: #0000BB">trlr_seal1</span><span style="color: #007700">,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">t</span><span style="color: #007700">.</span><span style="color: #0000BB">trlr_seal2</span><span style="color: #007700">,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">t</span><span style="color: #007700">.</span><span style="color: #0000BB">trlr_seal3</span><span style="color: #007700">,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #0000BB">t</span><span style="color: #007700">.</span><span style="color: #0000BB">trlr_cod<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;locmst&nbsp;l<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;left<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;join&nbsp;trlr&nbsp;t<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on&nbsp;l</span><span style="color: #007700">.</span><span style="color: #0000BB">stoloc&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">t</span><span style="color: #007700">.</span><span style="color: #0000BB">yard_loc<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;left<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;join&nbsp;dscmst&nbsp;st<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on&nbsp;st</span><span style="color: #007700">.</span><span style="color: #0000BB">colnam&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'trlr_stat'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #007700">and&nbsp;</span><span style="color: #0000BB">st</span><span style="color: #007700">.</span><span style="color: #0000BB">colval&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">t</span><span style="color: #007700">.</span><span style="color: #0000BB">trlr_stat<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;where&nbsp;l</span><span style="color: #007700">.</span><span style="color: #0000BB">stoloc&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #DD0000">'002'&nbsp;</span>
+</span>
+</code></td></tr>
+</tbody></table>
+</fieldset>
+
+<fieldset id="ci_profiler_http_headers" style="border:1px solid #000;padding:6px 10px 10px 10px;margin:20px 0 20px 0;background-color:#eee;">
+<legend style="color:#000;">&nbsp;&nbsp;HTTP HEADERS&nbsp;&nbsp;(<span style="cursor: pointer;" onclick="var s=document.getElementById(&#39;ci_profiler_httpheaders_table&#39;).style;s.display=s.display==&#39;none&#39;?&#39;&#39;:&#39;none&#39;;this.innerHTML=this.innerHTML==&#39;Show&#39;?&#39;Hide&#39;:&#39;Show&#39;;">Show</span>)</legend>
+
+
+<table style="width:100%;display:none;" id="ci_profiler_httpheaders_table">
+<tbody><tr><td style="vertical-align:top;width:50%;padding:5px;color:#900;background-color:#ddd;">HTTP_ACCEPT&nbsp;&nbsp;</td><td style="width:50%;padding:5px;color:#000;background-color:#ddd;">text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9</td></tr>
+<tr><td style="vertical-align:top;width:50%;padding:5px;color:#900;background-color:#ddd;">HTTP_USER_AGENT&nbsp;&nbsp;</td><td style="width:50%;padding:5px;color:#000;background-color:#ddd;">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36</td></tr>
+<tr><td style="vertical-align:top;width:50%;padding:5px;color:#900;background-color:#ddd;">HTTP_CONNECTION&nbsp;&nbsp;</td><td style="width:50%;padding:5px;color:#000;background-color:#ddd;">keep-alive</td></tr>
+<tr><td style="vertical-align:top;width:50%;padding:5px;color:#900;background-color:#ddd;">SERVER_PORT&nbsp;&nbsp;</td><td style="width:50%;padding:5px;color:#000;background-color:#ddd;">80</td></tr>
+<tr><td style="vertical-align:top;width:50%;padding:5px;color:#900;background-color:#ddd;">SERVER_NAME&nbsp;&nbsp;</td><td style="width:50%;padding:5px;color:#000;background-color:#ddd;">intranet.edc3.com</td></tr>
+<tr><td style="vertical-align:top;width:50%;padding:5px;color:#900;background-color:#ddd;">REMOTE_ADDR&nbsp;&nbsp;</td><td style="width:50%;padding:5px;color:#000;background-color:#ddd;">10.143.224.49</td></tr>
+<tr><td style="vertical-align:top;width:50%;padding:5px;color:#900;background-color:#ddd;">SERVER_SOFTWARE&nbsp;&nbsp;</td><td style="width:50%;padding:5px;color:#000;background-color:#ddd;">Apache/2.4.52 (Ubuntu)</td></tr>
+<tr><td style="vertical-align:top;width:50%;padding:5px;color:#900;background-color:#ddd;">HTTP_ACCEPT_LANGUAGE&nbsp;&nbsp;</td><td style="width:50%;padding:5px;color:#000;background-color:#ddd;">en-US,en;q=0.9,ru;q=0.8</td></tr>
+<tr><td style="vertical-align:top;width:50%;padding:5px;color:#900;background-color:#ddd;">SCRIPT_NAME&nbsp;&nbsp;</td><td style="width:50%;padding:5px;color:#000;background-color:#ddd;">/index.php</td></tr>
+<tr><td style="vertical-align:top;width:50%;padding:5px;color:#900;background-color:#ddd;">REQUEST_METHOD&nbsp;&nbsp;</td><td style="width:50%;padding:5px;color:#000;background-color:#ddd;">GET</td></tr>
+<tr><td style="vertical-align:top;width:50%;padding:5px;color:#900;background-color:#ddd;"> HTTP_HOST&nbsp;&nbsp;</td><td style="width:50%;padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="vertical-align:top;width:50%;padding:5px;color:#900;background-color:#ddd;">REMOTE_HOST&nbsp;&nbsp;</td><td style="width:50%;padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="vertical-align:top;width:50%;padding:5px;color:#900;background-color:#ddd;">CONTENT_TYPE&nbsp;&nbsp;</td><td style="width:50%;padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="vertical-align:top;width:50%;padding:5px;color:#900;background-color:#ddd;">SERVER_PROTOCOL&nbsp;&nbsp;</td><td style="width:50%;padding:5px;color:#000;background-color:#ddd;">HTTP/1.1</td></tr>
+<tr><td style="vertical-align:top;width:50%;padding:5px;color:#900;background-color:#ddd;">QUERY_STRING&nbsp;&nbsp;</td><td style="width:50%;padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="vertical-align:top;width:50%;padding:5px;color:#900;background-color:#ddd;">HTTP_ACCEPT_ENCODING&nbsp;&nbsp;</td><td style="width:50%;padding:5px;color:#000;background-color:#ddd;">gzip, deflate</td></tr>
+<tr><td style="vertical-align:top;width:50%;padding:5px;color:#900;background-color:#ddd;">HTTP_X_FORWARDED_FOR&nbsp;&nbsp;</td><td style="width:50%;padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="vertical-align:top;width:50%;padding:5px;color:#900;background-color:#ddd;">HTTP_DNT&nbsp;&nbsp;</td><td style="width:50%;padding:5px;color:#000;background-color:#ddd;"></td></tr>
+</tbody></table>
+</fieldset><fieldset id="ci_profiler_csession" style="border:1px solid #000;padding:6px 10px 10px 10px;margin:20px 0 20px 0;background-color:#eee;"><legend style="color:#000;">&nbsp;&nbsp;SESSION DATA&nbsp;&nbsp;(<span style="cursor: pointer;" onclick="var s=document.getElementById(&#39;ci_profiler_session_data&#39;).style;s.display=s.display==&#39;none&#39;?&#39;&#39;:&#39;none&#39;;this.innerHTML=this.innerHTML==&#39;Show&#39;?&#39;Hide&#39;:&#39;Show&#39;;">Show</span>)</legend><table style="width:100%;display:none;" id="ci_profiler_session_data"><tbody><tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">__ci_last_regenerate&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">1675283657</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">user_id&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">FARLEDA</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">environment&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">PRD</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">audit_loc&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">002</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">audit_user&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">farleda</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">audit_direction&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">1</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">tm_id&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">2</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">change_pass&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">0</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">home_bldg&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">EDC3</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">logged_in&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">1</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">admin&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">1</td></tr>
+</tbody></table>
+</fieldset>
+
+<fieldset id="ci_profiler_config" style="border:1px solid #000;padding:6px 10px 10px 10px;margin:20px 0 20px 0;background-color:#eee;">
+<legend style="color:#000;">&nbsp;&nbsp;CONFIG VARIABLES&nbsp;&nbsp;(<span style="cursor: pointer;" onclick="var s=document.getElementById(&#39;ci_profiler_config_table&#39;).style;s.display=s.display==&#39;none&#39;?&#39;&#39;:&#39;none&#39;;this.innerHTML=this.innerHTML==&#39;Show&#39;?&#39;Hide&#39;:&#39;Show&#39;;">Show</span>)</legend>
+
+
+<table style="width:100%;display:none;" id="ci_profiler_config_table">
+<tbody><tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">base_url&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">http://intranet.edc3.com/</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">webroot_url&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">http://intranet.edc3.com/index.php</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">file_url&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">http://intranet.edc3.com/images/</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">file_path&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">/var/www/codeigniter/images/</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">image_path&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">/var/www/codeigniter/images/</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">image_url&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">http://intranet.edc3.com/images/</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">facility_name&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">EDC3</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">site_name&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">EDC3</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">warehouse_id&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">1918</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">web_debug&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">0</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">tmp&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">/var/www/codeigniter/tmp/</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">picdir&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">/var/www/codeigniter/images/</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">email_template&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"><pre>Array
+(
+    [table_open] =&gt; &lt;table style="text-align: center;padding:12px;border: solid 1px black;border-collapse:collapse;"&gt;
+    [heading_row_start] =&gt; &lt;tr style="background-color:navy;color:white;font-weight:bold;border: solid 1px black;border-collapse:collapse"&gt;
+    [heading_cell_start] =&gt; &lt;th style="background-color:navy;color:white;padding:8px;font-weight:bold;border: solid 1px black;border-collapse:collapse; text-align:center;"&gt;
+    [row_start] =&gt; &lt;tr style="border: solid 1px black;border-collapse:collapse"&gt;
+    [cell_start] =&gt; &lt;td style="border: solid 1px black;padding:2px 4px;border-collapse:collapse"&gt;
+    [row_alt_start] =&gt; &lt;tr style="border: solid 1px black;border-collapse:collapse"&gt;
+    [cell_alt_start] =&gt; &lt;td style="border: solid 1px black;padding:2px 4px;border-collapse:collapse"&gt;
+)
+</pre></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">admins&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"><pre>Array
+(
+    [0] =&gt; WINCHTR
+    [1] =&gt; MLEHMAN
+    [2] =&gt; GILLANA
+    [3] =&gt; MORROJA
+    [4] =&gt; SSMITH
+    [5] =&gt; kirbydo
+    [6] =&gt; HANSOAN
+    [7] =&gt; HAUNDA
+    [8] =&gt; FARLEDA
+    [9] =&gt; Subscription
+    [10] =&gt; DKIRBY
+    [11] =&gt; RITZMIA
+)
+</pre></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">ebol_directory&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">http://intranet.edc3.com/index.php/ebol/</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">default_pass&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">31b0fff67730bba7ed7727bc0b4a9c7a</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">email_from_address&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">NoReply@edc3.com</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">email_from_display&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">EDC3 Report Service</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">email_domain&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">@edc3.com</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">email_subject_prefix&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">EDC3</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">override_key&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">5984</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">fh_ftp_user&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">1918lcsv</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">fh_ftp_address&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">b2b.hersheys.com</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">fh_ftp_password&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">pl98bvgh</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">fh_filename&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">ShipmentInfo.xml</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">fh_remote_dir&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">/1918lcsv</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">fh_transfer_method&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">sftp</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">index_page&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">index.php</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">uri_protocol&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">REQUEST_URI</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">url_suffix&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">language&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">english</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">charset&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">UTF-8</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">enable_hooks&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">subclass_prefix&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">EDC3_</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">composer_autoload&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">permitted_uri_chars&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">a-z 0-9~%.:_\-</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">enable_query_strings&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">controller_trigger&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">c</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">function_trigger&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">m</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">directory_trigger&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">d</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">allow_get_array&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">1</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">log_threshold&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">0</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">log_path&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">log_file_extension&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">log_file_permissions&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">420</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">log_date_format&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">Y-m-d H:i:s</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">error_views_path&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">cache_path&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">cache_query_string&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">encryption_key&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">sess_driver&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">files</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">sess_cookie_name&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">ci_session</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">sess_samesite&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">Lax</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">sess_expiration&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">28800</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">sess_save_path&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">/var/www/codeigniter/tmp/cache</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">sess_match_ip&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">sess_time_to_update&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">300</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">sess_regenerate_destroy&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">cookie_prefix&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">cookie_domain&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">cookie_path&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">/</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">cookie_secure&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">cookie_httponly&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">cookie_samesite&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">Lax</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">standardize_newlines&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">global_xss_filtering&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">csrf_protection&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">csrf_token_name&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">csrf_test_name</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">csrf_cookie_name&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">csrf_cookie_name</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">csrf_expire&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">7200</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">csrf_regenerate&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">1</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">csrf_exclude_uris&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"><pre>Array
+(
+)
+</pre></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">compress_output&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">time_reference&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;">local</td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">rewrite_short_tags&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+<tr><td style="padding:5px;vertical-align:top;color:#900;background-color:#ddd;">proxy_ips&nbsp;&nbsp;</td><td style="padding:5px;color:#000;background-color:#ddd;"></td></tr>
+</tbody></table>
+</fieldset></div></body></html>
