@@ -1,0 +1,27 @@
+{
+  "roleId": "quality-manager",
+  "displayName": "Quality Manager",
+  "extends": "base-salaried",
+  "_todo": "Add any groups or SQL actions unique to this job function below. Both lists ADD to what is inherited.",
+  "ad": {
+    "title": "Quality Manager",
+    "department": "Quality"
+  },
+  "groups": [],
+  "sqlActions": [
+    {
+      "system": "Intranet",
+      "action": "GrantRole",
+      "parameters": {
+        "RoleCode": "2"
+      }
+    },
+        {
+      "system": "Intranet",
+      "action": "GrantRole",
+      "parameters": {
+        "RoleCode": "32"
+      }
+    }
+  ]
+}

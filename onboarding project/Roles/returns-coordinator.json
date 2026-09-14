@@ -1,0 +1,20 @@
+{
+  "roleId": "returns-coordinator",
+  "displayName": "Returns Coordinator",
+  "extends": "base-hourly",
+  "_todo": "Replace the placeholder RoleCode with the real WMS role code.",
+  "ad": {
+    "title": "Returns Coordinator",
+    "department": "Operations"
+  },
+  "groups": [],
+  "sqlActions": [
+    {
+      "system": "Intranet",
+      "action": "GrantRole",
+      "parameters": {
+        "RoleCode": "6"
+      }
+    }
+  ]
+}

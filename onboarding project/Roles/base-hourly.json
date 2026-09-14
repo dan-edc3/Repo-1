@@ -1,0 +1,22 @@
+{
+  "roleId": "base-hourly",
+  "displayName": "(base) Hourly / floor",
+  "description": "Shared settings for hourly floor staff. Not selectable on its own.",
+  "abstract": true,
+  "extends": "base-employee",
+
+  "_note": [
+    "A frontline licence rather than E3, no VPN, and floor printers instead of office.",
+    "Every hourly job function inherits this and adds its own WMS role grant."
+  ],
+
+  "ad": {
+    "ou": "OU=Associates,OU=User Accounts,OU=EDC3,{domainDn}"
+  },
+
+  "groups": [
+    "Internet Access - Test"
+  ],
+
+  "sqlActions": []
+}

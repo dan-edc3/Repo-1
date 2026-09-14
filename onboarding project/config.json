@@ -1,0 +1,139 @@
+{
+  "_comment": "Environment settings. Edit these values to match your domain before first use.",
+  "domain": "edc3.com",
+  "domainDn": "DC=edc3,DC=com",
+  "defaultUpnSuffix": "edc3.com",
+  "logPath": "\\\\fps01\\Groups\\IT\\onboarding",
+  "_sqlComment": [
+    "Every SQL statement the module can run is declared here and nowhere else.",
+    "A role file refers to an action only by name, so changing a table or adding a",
+    "system is a config edit rather than a code edit.",
+    "existsQuery must return a count; if it returns > 0 the action is skipped, which",
+    "is what makes re-running a partially failed onboarding safe.",
+    "Values are always passed as SqlParameters - never concatenate into these strings."
+  ],
+  "sqlSystems": {
+    "Intranet": {
+      "connectionString": "Server=lm01c;Database=edc3_intranet;Integrated Security=SSPI;Encrypt=True;TrustServerCertificate=True;Application Name=Onboarding",
+      "actions": {
+        "CreateUser": {
+          "description": "Insert the user record into the Intranet. EmployeeNumber comes from the console prompt of the same name.",
+          "existsQuery": "SELECT COUNT(1) FROM [edc3_intranet].[dbo].[teammate] WHERE user_id = @intranetUserId OR personnum = @EmployeeNumber",
+          "statement": "INSERT INTO [edc3_intranet].[dbo].[teammate] (user_id, first_name, last_name, Email, personnum, change_pass, job_type, disabled) VALUES (@intranetUserId, @firstname, @lastname, @email, @EmployeeNumber, 1, 0, 0)"
+        },
+        "GrantRole": {
+          "description": "Assign a Intranet role. RoleCode is supplied per job function in that function's role file.",
+          "existsQuery": "SELECT COUNT(1) FROM [edc3_intranet].[dbo].[acl_tm_role] r JOIN [edc3_intranet].[dbo].[teammate] u ON u.tm_id = r.tm_id WHERE u.personnum = @EmployeeNumber AND r.role_id = @RoleCode",
+          "statement": "INSERT INTO [edc3_intranet].[dbo].[acl_tm_role] (tm_id, role_id) SELECT tm_id, @RoleCode FROM [edc3_intranet].[dbo].[teammate] WHERE personnum = @EmployeeNumber"
+        }
+      },
+      "uniqueQuery": "SELECT COUNT(1) FROM [edc3_intranet].[dbo].[teammate] WHERE user_id = @candidate"
+    },
+    "ticketSystem": {
+      "connectionString": "Server=lm01c;Database=JitBitHelpDesk;Integrated Security=SSPI;Encrypt=True;TrustServerCertificate=True;Application Name=Onboarding",
+      "actions": {
+        "CreateUser": {
+          "description": "Add the user to the ticketing system's user table.",
+          "existsQuery": "SELECT COUNT(1) FROM [JitBitHelpDesk].[dbo].[hdUsers] WHERE Email = @email",
+          "statement": "INSERT INTO [JitBitHelpDesk].[dbo].[hdUsers] (UserName, Email, FirstName, LastName, CompanyID, Disabled, Password) VALUES (@email, @email, @firstName, @lastName, @hdCompany, 0, 'Hershey1')"
+        }
+      },
+      "uniqueQuery": "SELECT COUNT(1) FROM [JitBitHelpDesk].[dbo].[hdUsers] WHERE username = @email"
+    }
+  },
+  "_parameterComment": [
+    "Any @Name in a statement is filled automatically from either the onboarding context",
+    "(samAccountName, displayName, email, firstName, lastName, roleId, roleName, createdBy, runId)",
+    "or from a console prompt whose 'name' matches. @EmployeeNumber and @Shift come from the",
+    "two prompts defined in Roles/base-employee.json. A statement asking for a parameter that",
+    "nothing supplies fails loudly rather than silently inserting NULL."
+  ],
+  "_employeeNumberComment": [
+    "Employee numbers are variable-length digit strings. If any of them can carry a",
+    "LEADING ZERO, the receiving SQL column must be a string type (VARCHAR/NVARCHAR),",
+    "not INT - an INT column silently turns 004821 into 4821, and the existsQuery that",
+    "makes re-runs safe would then stop matching."
+  ],
+  "_namingComment": [
+    "Governs how every identifier is generated. Defined once here as the site standard;",
+    "an individual role file may override any part of it by including its own 'naming'",
+    "block, which merges over this one attribute by attribute.",
+    "",
+    "Per identifier:",
+    "  format            The primary pattern. {token:N} takes the first N characters.",
+    "  collisionFormats  Tried in order when the primary is taken. A format containing",
+    "                    {n} is retried with n = 2,3,4... {n} is never truncated.",
+    "  transform         Applied in order. Put 'ascii' first so accents fold to letters",
+    "                    instead of being deleted by the filters that follow.",
+    "  maxLength         Hard cap. 20 for sAMAccountName is an AD limit, not a preference.",
+    "  validate          Regex the final value must match, or the candidate is rejected.",
+    "  uniqueIn          Systems the value must be free in: 'ad', or 'sql:<SystemName>'",
+    "                    (which needs a 'uniqueQuery' on that system, below)."
+  ],
+  "naming": {
+    "samAccountName": {
+      "format": "{firstName}.{lastName}",
+      "collisionFormats": [
+        "{firstName:2}{lastName}",
+        "{firstName}{lastName}",
+        "{firstInitial}{lastName}{n}"
+      ],
+      "transform": [
+        "ascii",
+        "keep:A-Za-z0-9.",
+        "lower"
+      ],
+      "maxLength": 20,
+      "minLength": 3,
+      "validate": "^[a-z][a-z0-9.]{2,19}$",
+      "uniqueIn": [
+        "ad"
+      ],
+      "maxAttempts": 50,
+      "_dotNote": "TO USE dana.reyes STYLE USERNAMES, change three keys together: format -> \"{firstName}.{lastName}\", transform -> [\"ascii\", \"keep:A-Za-z0-9.\", \"lower\"], validate -> \"^[a-z][a-z0-9.]{2,19}$\", and update collisionFormats to match. The 'keep' transform is what preserves the dot; 'alphanumeric' would strip it straight back out. Run Test-OnboardingRole afterwards - it checks all three agree."
+    },
+    "intranetUserId": {
+      "_note": "Example of a system with a tighter convention: 7 characters, uppercase, letters and digits only.",
+      "format": "{lastName:5}{firstname:2}",
+      "collisionFormats": [
+        "{lastName:5}{firstInitial}{n}"
+      ],
+      "transform": [
+        "ascii",
+        "alphanumeric",
+        "upper"
+      ],
+      "maxLength": 8,
+      "minLength": 2,
+      "validate": "^[A-Z0-9]{2,8}$",
+      "uniqueIn": [
+        "sql:Intranet"
+      ],
+      "maxAttempts": 20
+    }
+  },
+  "password": {
+    "mode": "template",
+    "template": "{firstInitial}{lastInitial}#{EmployeeNumber}",
+    "minLength": 8,
+    "length": 16,
+    "_modeNote": "'template' builds the password from the fields on the form. 'random' generates a cryptographically random string and ignores 'template'. 'length' applies to random mode only. To switch back, change mode to \"random\" - that one word is the whole change.",
+    "_securityWarning": [
+      "A templated password is PREDICTABLE. Anyone who can work out the inputs can work out",
+      "the password, before the employee has logged in even once.",
+      "",
+      "This matters more than usual with this particular template, because the employee",
+      "number is written into the AD 'description' attribute as 'Emp# ######', and that",
+      "attribute is readable by EVERY authenticated user in the domain. Initials come from",
+      "the display name, which is equally public. So any domain user can compute the initial",
+      "password of every pending new hire by reading the directory.",
+      "",
+      "If you keep template mode, the mitigations that matter are:",
+      "  - changePasswordAtLogon stays true in base-employee.json (it is)",
+      "  - onboard close to the start date, so the window of exposure is short",
+      "  - consider moving the employee number out of 'description' into a non-public",
+      "    attribute, which removes the easy half of the guess",
+      "Switching mode to 'random' removes the issue entirely."
+    ]
+  }
+}

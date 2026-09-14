@@ -1,0 +1,11 @@
+{
+  "roleId": "backup-tasker",
+  "displayName": "Backup Tasker",
+  "extends": "tasker",
+  "_note": "Extends the primary function, so it inherits that function's groups and WMS role by default. If a backup should NOT get the full primary access, add the differences here or set \"sqlActionsReset\": true and list its own.",
+  "ad": {
+    "title": "Backup Tasker"
+  },
+  "groups": [],
+  "sqlActions": []
+}

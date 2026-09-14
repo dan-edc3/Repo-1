@@ -1,0 +1,12 @@
+{
+  "roleId": "sr-operations-systems-analyst-IT",
+  "displayName": "Sr. Operations Systems Analyst [IT]",
+  "extends": "base-salaried",
+  "_todo": "Add any groups or SQL actions unique to this job function below. Both lists ADD to what is inherited.",
+  "ad": {
+    "title": "Sr. Operations Systems Analyst",
+    "department": "Systems"
+  },
+  "groups": [],
+  "sqlActions": []
+}

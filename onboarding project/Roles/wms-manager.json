@@ -1,0 +1,12 @@
+{
+  "roleId": "wms-manager",
+  "displayName": "WMS Manager",
+  "extends": "base-salaried",
+  "_todo": "Add any groups or SQL actions unique to this job function below. Both lists ADD to what is inherited.",
+  "ad": {
+    "title": "WMS Manager",
+    "department": "Systems"
+  },
+  "groups": [],
+  "sqlActions": []
+}

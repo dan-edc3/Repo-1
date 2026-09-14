@@ -1,0 +1,20 @@
+{
+  "roleId": "unlocker",
+  "displayName": "Unlocker",
+  "extends": "base-hourly",
+  "_todo": "Replace the placeholder RoleCode with the real WMS role code.",
+  "ad": {
+    "title": "Unlocker",
+    "department": "Operations"
+  },
+  "groups": [],
+  "sqlActions": [
+    {
+      "system": "Intranet",
+      "action": "GrantRole",
+      "parameters": {
+        "RoleCode": "6"
+      }
+    }
+  ]
+}

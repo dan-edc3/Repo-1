@@ -1,0 +1,41 @@
+{
+  "roleId": "planning-and-analysis-manager",
+  "displayName": "Planning and Analysis Manager",
+  "extends": "base-salaried",
+  "_todo": "Add any groups or SQL actions unique to this job function below. Both lists ADD to what is inherited.",
+  "ad": {
+    "title": "Planning and Analysis Manager",
+    "department": "Planning and Analysis"
+  },
+  "groups": [],
+  "sqlActions": [
+     {
+      "system": "Intranet",
+      "action": "GrantRole",
+      "parameters": {
+        "RoleCode": "1"
+      }
+    },
+    {
+      "system": "Intranet",
+      "action": "GrantRole",
+      "parameters": {
+        "RoleCode": "2"
+      }
+    },
+         {
+      "system": "Intranet",
+      "action": "GrantRole",
+      "parameters": {
+        "RoleCode": "32"
+      }
+    },
+         {
+      "system": "Intranet",
+      "action": "GrantRole",
+      "parameters": {
+        "RoleCode": "21"
+      }
+    }
+  ]
+}

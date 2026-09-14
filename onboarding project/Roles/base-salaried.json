@@ -1,0 +1,32 @@
+{
+  "roleId": "base-salaried",
+  "displayName": "(base) Salaried / office",
+  "description": "Shared settings for salaried and office staff. Not selectable on its own.",
+  "abstract": true,
+  "extends": "base-employee",
+
+  "ad": {
+    "ou": "OU=Management,OU=User Accounts,OU=EDC3,{domainDn}"
+  },
+
+  "_groupsNote": "ADDED to base-employee's groups, not replacing them.",
+  "groups": [
+    "Printers_MainOffice",
+    "sharepoint_management",
+    "O365 External Access (All Cloud Apps)",
+    "Management",
+    "sharepoint_management",
+    "Printers_ZebraRackLabeler",
+    "Internet Access - Full"
+  ],
+
+  "sqlActions": [
+     {
+      "system": "Intranet",
+      "action": "GrantRole",
+      "parameters": {
+        "RoleCode": "32"
+      }
+    }
+  ]
+}

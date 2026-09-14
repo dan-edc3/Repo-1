@@ -1,0 +1,121 @@
+{
+  "roleId": "base-employee",
+  "displayName": "(base) Every employee",
+  "description": "Shared foundation for every account type. Not selectable on its own.",
+  "abstract": true,
+  "_note": [
+    "ONLY things true of every single employee belong here.",
+    "Anything that differs between salaried and hourly belongs in base-salaried or",
+    "base-hourly instead. Licence groups in particular are NOT universal - because",
+    "groups are additive, putting E3 here would give hourly staff both E3 and F3."
+  ],
+  "ad": {
+    "changePasswordAtLogon": true,
+    "_attributeNotes": [
+      "description  -> the required 'Emp# ######' string",
+      "company      -> holds the shift, per site convention",
+      "employeeNumber is a first-class AD attribute (dedicated New-ADUser parameter)",
+      "extensionAttribute1 is what Exchange Online calls CustomAttribute1"
+    ],
+    "description": "Emp# {EmployeeNumber}",
+    "company": "{Shift}",
+    "employeeNumber": "{EmployeeNumber}",
+    "otherAttributes": {
+      "customAttribute1": "Everyone"
+    },
+    "_namingNote": "Username generation is NOT configured here. It lives in the 'naming' block of config.json so that one set of rules governs AD, the WMS and anything added later. A role may override it with its own top-level 'naming' block.",
+    "_upnNote": "UPN suffix is NOT set here. It comes from defaultUpnSuffix in config.json so there is one place to change it. Add \"upnSuffix\" to a specific role only if that role genuinely needs a different one - it will override the default."
+  },
+  "groups": [
+    "MS-License_M365_E5-M365_E5_Security_License",
+    "O365 MFA SSPR Combined Registration",
+    "Sharepoint_groups",
+    "Printers_SouthDock"
+  ],
+  "sqlActions": [
+    {
+      "system": "Intranet",
+      "action": "CreateUser"
+    },
+    {
+      "system": "ticketSystem",
+      "action": "CreateUser"
+    }
+  ],
+  "_promptNotes": "Inherited by every role, so these two fields appear on every account type.",
+  "prompts": [
+    {
+      "name": "EmployeeNumber",
+      "label": "Employee number",
+      "type": "text",
+      "required": true,
+      "_validationNote": "Variable-length digits. Tighten the range if you know the real bounds, e.g. ^[0-9]{5,7}$",
+      "validation": "^[0-9]+$",
+      "validationMessage": "Employee number must contain digits only, with no spaces or letters."
+    },
+    {
+      "name": "Shift",
+      "label": "Shift",
+      "type": "choice",
+      "options": [
+        "EXEMPT",
+        "DC1",
+        "DC2",
+        "DC3",
+        "DC3A",
+        "GATE 1",
+        "GATE 2",
+        "GATE 3",
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "IMPACT1",
+        "IMPACT2",
+        "IMPACT3",
+        "TASKER Mo-Fr 11p-7a",
+        "TASKER Tu-Sa 11p-7a",
+        "TASKER M-Tu, F-Su 11p-7a"
+      ],
+      "required": true
+    },
+    {
+      "name": "hdCompany",
+      "label": "Helpdesk Group",
+      "type": "choice",
+      "required": true,
+      "options": [
+        {
+          "label": "DHL/EDC3 Leadership",
+          "value": "5"
+        },
+        {
+          "label": "DHL/EDC3 Associate",
+          "value": "8"
+        }
+      ]
+    }
+  ],
+  "_promptExample": {
+    "_howToUse": "Copy this object into the 'prompts' array below to activate it. Options may be plain strings (label and value identical) or {label, value} objects. The operator picks the label; AD, SQL and tokens all receive the value. The label is also available as {EmployeeClass_label}.",
+    "name": "EmployeeClass",
+    "label": "Employee class",
+    "type": "choice",
+    "required": true,
+    "options": [
+      {
+        "label": "Leadership",
+        "value": "1"
+      },
+      {
+        "label": "Salaried",
+        "value": "2"
+      },
+      {
+        "label": "Hourly",
+        "value": "3"
+      }
+    ]
+  }
+}

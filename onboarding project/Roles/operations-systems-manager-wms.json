@@ -1,0 +1,34 @@
+{
+  "roleId": "operations-systems-manager-wms",
+  "displayName": "Operations Systems Manager [WMS]",
+  "extends": "base-salaried",
+  "_todo": "Add any groups or SQL actions unique to this job function below. Both lists ADD to what is inherited.",
+  "ad": {
+    "title": "Operations Systems Manager [WMS]",
+    "department": "Systems"
+  },
+  "groups": [],
+  "sqlActions": [
+     {
+      "system": "Intranet",
+      "action": "GrantRole",
+      "parameters": {
+        "RoleCode": "32"
+      }
+    },
+    {
+      "system": "Intranet",
+      "action": "GrantRole",
+      "parameters": {
+        "RoleCode": "11"
+      }
+    },
+         {
+      "system": "Intranet",
+      "action": "GrantRole",
+      "parameters": {
+        "RoleCode": "2"
+      }
+    }
+  ]
+}

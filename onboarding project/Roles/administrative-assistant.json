@@ -1,0 +1,20 @@
+{
+  "roleId": "administrative-assistant",
+  "displayName": "Administrative Assistant",
+  "extends": "base-salaried",
+  "_todo": "Add any groups or SQL actions unique to this job function below. Both lists ADD to what is inherited.",
+  "ad": {
+    "title": "Administrative Assistant",
+    "department": "Administration"
+  },
+  "groups": [],
+  "sqlActions": [
+        {
+      "system": "Intranet",
+      "action": "GrantRole",
+      "parameters": {
+        "RoleCode": "18"
+      }
+    }
+  ]
+}

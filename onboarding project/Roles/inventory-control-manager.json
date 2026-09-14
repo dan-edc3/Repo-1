@@ -1,0 +1,43 @@
+{
+  "roleId": "inventory-control-manager",
+  "displayName": "Inventory Control Manager",
+  "extends": "base-salaried",
+  "_todo": "Add any groups or SQL actions unique to this job function below. Both lists ADD to what is inherited.",
+  "ad": {
+    "title": "Inventory Control Manager",
+    "department": "Inventory Control"
+  },
+  "groups": [
+    "Avigilon_Camera_Access"
+  ],
+  "sqlActions": [
+     {
+      "system": "Intranet",
+      "action": "GrantRole",
+      "parameters": {
+        "RoleCode": "32"
+      }
+    },
+     {
+      "system": "Intranet",
+      "action": "GrantRole",
+      "parameters": {
+        "RoleCode": "2"
+      }
+    },
+     {
+      "system": "Intranet",
+      "action": "GrantRole",
+      "parameters": {
+        "RoleCode": "6"
+      }
+    },
+     {
+      "system": "Intranet",
+      "action": "GrantRole",
+      "parameters": {
+        "RoleCode": "31"
+      }
+    }
+  ]
+}

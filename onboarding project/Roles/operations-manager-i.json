@@ -1,0 +1,27 @@
+{
+  "roleId": "operations-manager-i",
+  "displayName": "Operations Manager I",
+  "extends": "base-salaried",
+  "_todo": "Add any groups or SQL actions unique to this job function below. Both lists ADD to what is inherited.",
+  "ad": {
+    "title": "Operations Manager I",
+    "department": "Operations"
+  },
+  "groups": [],
+  "sqlActions": [
+    {
+      "system": "Intranet",
+      "action": "GrantRole",
+      "parameters": {
+        "RoleCode": "31"
+      }
+    },
+    {
+      "system": "Intranet",
+      "action": "GrantRole",
+      "parameters": {
+        "RoleCode": "3"
+      }
+    }
+  ]
+}

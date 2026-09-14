@@ -1,0 +1,20 @@
+{
+  "roleId": "recoup",
+  "displayName": "Recoup",
+  "extends": "base-hourly",
+  "_todo": "Replace the placeholder RoleCode with the real WMS role code. Add any extra groups below - they ADD to what is inherited.",
+  "ad": {
+    "title": "Recoup",
+    "department": "Operations"
+  },
+  "groups": [],
+  "sqlActions": [
+    {
+      "system": "Intranet",
+      "action": "GrantRole",
+      "parameters": {
+        "RoleCode": "6"
+      }
+    }
+  ]
+}
